@@ -12,4 +12,15 @@ class HttpTasksHandler {
     
     typealias CompletionHandler = (reponseData: NSData, error: NSError) -> Void
     
+    var completionHandler: CompletionHandler?
+    
+    
+    init() {
+        
+    }
+    
+    func downloadRepositoriesList(langauage: String, completionHandler: CompletionHandler? = nil) -> Void {
+        
+    }
+    
 }
