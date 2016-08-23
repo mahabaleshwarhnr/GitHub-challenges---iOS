@@ -2,7 +2,7 @@
 //  SearchTableViewController.swift
 //  GithubApiDemo
 //
-//  Created by DP Samant on 23/08/16.
+//  Created by Mahabaleshwar on 23/08/16.
 //  Copyright © 2016 DP Samant. All rights reserved.
 //
 

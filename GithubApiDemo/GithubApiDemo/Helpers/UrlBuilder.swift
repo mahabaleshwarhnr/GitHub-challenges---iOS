@@ -2,7 +2,7 @@
 //  UrlBuilder.swift
 //  GithubApiDemo
 //
-//  Created by DP Samant on 23/08/16.
+//  Created by Mahabaleshwar on 23/08/16.
 //  Copyright © 2016 DP Samant. All rights reserved.
 //
 
@@ -14,7 +14,12 @@ public class UrlBuilder {
         return "https://api.github.com"
     }
     
-    static func getRepositoriesUrl() -> String {
-        return getHostUrl() + "/search/repositories"
+    static func getPageInfo() {
+        
+    }
+    
+    static func getRepositoriesUrl(forLanguage: String) -> String {
+        //https://api.github.com/search/repositories?q=language:swift&sort=stars&order=desc&page=1&per_page=10
+        return getHostUrl() + "/search/repositories?q=language:" + forLanguage + "&sort=stars&order=desc"
     }
 }
