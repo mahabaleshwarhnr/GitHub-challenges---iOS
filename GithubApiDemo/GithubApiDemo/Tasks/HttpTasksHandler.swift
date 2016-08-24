@@ -14,47 +14,53 @@ class HttpTasksHandler {
     typealias CompletionHandler = (reponseData: NSData?, response: NSURLResponse?, error: NSError?) -> Void
     
     var completionHandler: CompletionHandler?
-    var taskType: HttpTaskType
+    var taskType: HttpTaskType = .None
     var dataTask: NSURLSessionDataTask?
     
-    private var hostUrl: String
+    private var hostUrl: String?
     let defaultSession: NSURLSession
     
     
     //MARK:- Initialization
     
-    init(taskType: HttpTaskType, info:[String: AnyObject]) {
+    init?() {
         
-        self.taskType = taskType
         defaultSession = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+    }
+    
+    func sendGetRequest(taskType: HttpTaskType,info:[String: AnyObject]?, completionHandler:CompletionHandler) -> Void {
         
-        switch self.taskType {
+        self.completionHandler = completionHandler
         
+        switch taskType {
         case .DownloadRepositories:
-              let language = info["langauage"] as! String
-              self.hostUrl = UrlBuilder.getRepositoriesUrl(language)
-              downloadRepositoriesList(language)
-              break
+            let language = (info!["langauage"] as! String).stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())
+            self.hostUrl = UrlBuilder.getRepositoriesUrl(language!)
+            downloadRepositoriesList(language!, completionHandler: completionHandler)
+            break
+        default:
+            break
         }
-        
     }
     
     ////MARK:- Helper Methods
     
-    func downloadRepositoriesList(langauage: String, completionHandler: CompletionHandler? = nil) -> Void {
+    func downloadRepositoriesList(langauage: String, completionHandler: CompletionHandler) -> Void {
         
-        let serviceUrl = NSURL(string: self.hostUrl)
+        let serviceUrl = NSURL(string: self.hostUrl!)
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         self.dataTask = self.defaultSession.dataTaskWithURL(serviceUrl!, completionHandler: { (data, response, error) in
             
             dispatch_async(dispatch_get_main_queue()) {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                completionHandler!(reponseData: data!, response: response!, error: error!)
+                //completionHandler(reponseData: data!, response: response!, error: error!)
+                
+                self.completionHandler!(reponseData: data, response: response, error: error)
             }
         })
         
         dataTask?.resume()
-        
     }
+    
     
 }

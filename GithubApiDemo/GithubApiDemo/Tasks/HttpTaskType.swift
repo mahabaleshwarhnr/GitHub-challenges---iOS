@@ -11,5 +11,6 @@ import Foundation
 
 enum HttpTaskType {
     
+    case None
     case DownloadRepositories
 }
